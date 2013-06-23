@@ -23,7 +23,7 @@ public class SubscriptionManager {
     /**
      * Binds a listener to a publisher
      * 
-     * @param source the event generator
+     * @param source the event publisher
      * @param listener the event receiver
      */
     public <T extends EventListener> void subscribe(EventPublisher source, T listener) {
@@ -50,7 +50,7 @@ public class SubscriptionManager {
     /**
      * Unbinds a listener to a publisher
      * 
-     * @param source the event generator
+     * @param source the event publisher
      * @param listener the event receiver
      */
     public <T extends EventListener> void unsubscribe(EventPublisher source, T listener) {
@@ -62,7 +62,7 @@ public class SubscriptionManager {
     /**
      * Gets the object used to fire events
      * 
-     * @param source the event generator
+     * @param source the event publisher
      * @return the object used to fire events
      */
     public EventDispatcher getEventDispatcher(EventPublisher source) {
@@ -74,12 +74,12 @@ public class SubscriptionManager {
     }
 
     /**
-     * Removes all the listeners for a given event generator
+     * Removes all the listeners for a <b>single</b> event generator
      * 
-     * @param source the event generator
+     * @param source the event publisher
      */
-    public void cleanPublisher(EventPublisher source) {
-	log.debug("[cleanPublisher] Cleaning listeners for {}", source.getClass().getName());
+    public void unsubscribeAll(EventPublisher source) {
+	log.debug("[unsubscribeAll] Cleaning all listeners for {}", source.getClass().getName());
 	GenericEventDispatcher<?> dispatcher = dispatchers.get(source);
 	if (dispatcher != null) {
 	    dispatcher.removeListeners();
@@ -92,5 +92,20 @@ public class SubscriptionManager {
 	// TODO print a nice list of connections
 	return super.toString();
     }
-
+    
+    /**
+     * Gets the number of listeners registered for a publisher
+     * @param source the event publisher
+     * @return the number of listeners registered for a publisher
+     */
+    public int getSubscribersCount(EventPublisher source) {
+	GenericEventDispatcher<?> dispatcherObject = dispatchers.get(source);
+	
+	if (dispatcherObject == null) {
+	    return 0;
+	} else {
+	    return dispatcherObject.getListenersCount();
+	}
+    }
+    
 }

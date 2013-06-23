@@ -81,4 +81,8 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+	<ciManagement>
+		<system>Jenkins</system>
+		<url>https://hilikus.ci.cloudbees.com/job/Event-manager/</url>
+	</ciManagement>
 </project>
