@@ -1,0 +1,72 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>ca.hilikus.events</groupId>
+	<artifactId>event-manager</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>Event-manager</name>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.15</version>
+				<configuration>
+					<forkedProcessTimeoutInSeconds>15</forkedProcessTimeoutInSeconds>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<description>A library to deal with event subscriptions and dispatches</description>
+	<url>https://github.com/theHilikus/Event-manager</url>
+	<issueManagement>
+		<url>https://github.com/theHilikus/Event-manager/issues</url>
+	</issueManagement>
+
+	<developers>
+		<developer>
+			<name>Alejandro Endo</name>
+			<id>theHilikus</id>
+			<timezone>-5</timezone>
+			<email>theHilikus@gmail.com</email>
+		</developer>
+	</developers>
+	<scm>
+		<connection>scm:git:git://github.com/theHilikus/Event-manager.git</connection>
+		<url>https://github.com/theHilikus/Event-Manager</url>
+	</scm>
+	<inceptionYear>2013</inceptionYear>
+	<licenses>
+		<license>
+			<name>GNU Lesser General Public License v3.0 or later</name>
+			<url>http://www.spdx.org/licenses/LGPL-3.0+</url>
+		</license>
+	</licenses>
+
+	<dependencies>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.0.13</version>
+		</dependency>
+	</dependencies>
+</project>
