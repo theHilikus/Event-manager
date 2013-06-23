@@ -30,8 +30,13 @@ public class GenericEventDispatcher<T extends EventListener> implements EventDis
 
     private static final Logger log = LoggerFactory.getLogger(GenericEventDispatcher.class);
 
-    /* (non-Javadoc)
-     * @see ca.hilikus.jrobocom.gui.events.EventDispatcher2#addListener(T)
+    /**
+     * Adds a listener if it doesn't already exist. The event handler methods must have its first
+     * argument as a descendant of {@link EventObject} <br>
+     * The event handling methods must be declared directly in the listener and not in one of its
+     * super-classes. This is a performance limitation
+     * 
+     * @param listener the object to notify
      */
     @SuppressWarnings("unchecked")
     public void addListener(T listener) {
@@ -77,8 +82,8 @@ public class GenericEventDispatcher<T extends EventListener> implements EventDis
 
 
 
-    /* (non-Javadoc)
-     * @see ca.hilikus.jrobocom.gui.events.EventDispatcher2#removeListener(T)
+    /**
+     * @param listener the object to remove
      */
     public void removeListener(T listener) {
 	Method[] declaredMethods = listener.getClass().getDeclaredMethods();
@@ -109,8 +114,8 @@ public class GenericEventDispatcher<T extends EventListener> implements EventDis
 
     }
 
-    /* (non-Javadoc)
-     * @see ca.hilikus.jrobocom.gui.events.EventDispatcher2#removeListeners()
+    /**
+     * removes all listeners
      */
     public void removeListeners() {
 	listeners.clear();
@@ -120,12 +125,6 @@ public class GenericEventDispatcher<T extends EventListener> implements EventDis
 
     }
 
-    /**
-     * triggers an event
-     * 
-     * @param event event object used to resolve which method to call. It will also be passed in the
-     *            call
-     */
     @Override
     public void fireEvent(EventObject event) {
 

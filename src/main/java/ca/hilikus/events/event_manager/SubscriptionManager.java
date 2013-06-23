@@ -20,6 +20,12 @@ public class SubscriptionManager {
     private Map<EventPublisher, GenericEventDispatcher<?>> dispatchers = new HashMap<>();
     private static final Logger log = LoggerFactory.getLogger(SubscriptionManager.class);
 
+    /**
+     * Binds a listener to a publisher
+     * 
+     * @param source the event generator
+     * @param listener the event receiver
+     */
     public <T extends EventListener> void subscribe(EventPublisher source, T listener) {
 	log.debug("[subscribe] Adding {} --> {}", source.getClass().getName(), listener.getClass().getName());
 
@@ -41,12 +47,24 @@ public class SubscriptionManager {
 	return dispatcher;
     }
 
+    /**
+     * Unbinds a listener to a publisher
+     * 
+     * @param source the event generator
+     * @param listener the event receiver
+     */
     public <T extends EventListener> void unsubscribe(EventPublisher source, T listener) {
 	log.debug("[unsubscribe] Removing {} --> {}", source.getClass().getName(), listener.getClass().getName());
 	GenericEventDispatcher<T> dispatcher = (GenericEventDispatcher<T>) dispatchers.get(source);
 	dispatcher.removeListener(listener);
     }
 
+    /**
+     * Gets the object used to fire events
+     * 
+     * @param source the event generator
+     * @return the object used to fire events
+     */
     public EventDispatcher getEventDispatcher(EventPublisher source) {
 	EventDispatcher ret = dispatchers.get(source);
 	if (ret == null) {
@@ -55,6 +73,11 @@ public class SubscriptionManager {
 	return ret;
     }
 
+    /**
+     * Removes all the listeners for a given event generator
+     * 
+     * @param source the event generator
+     */
     public void cleanPublisher(EventPublisher source) {
 	log.debug("[cleanPublisher] Cleaning listeners for {}", source.getClass().getName());
 	GenericEventDispatcher<?> dispatcher = dispatchers.get(source);
@@ -63,11 +86,11 @@ public class SubscriptionManager {
 	}
 
     }
-    
+
     @Override
     public String toString() {
-        // TODO Auto-generated method stub
-        return super.toString();
+	// TODO print a nice list of connections
+	return super.toString();
     }
 
 }

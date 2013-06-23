@@ -1,7 +1,7 @@
 package ca.hilikus.events.event_manager.api;
 
 /**
- * Interface for classes that generate events
+ * Contract for classes that generate events
  * 
  * 
  * @author hilikus
