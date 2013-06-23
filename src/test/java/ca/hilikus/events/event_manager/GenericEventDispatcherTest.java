@@ -1,6 +1,7 @@
 package ca.hilikus.events.event_manager;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.testng.Assert.assertEquals;
@@ -11,6 +12,9 @@ import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import ca.hilikus.events.event_manager.dummies.DummyEvent;
+import ca.hilikus.events.event_manager.dummies.DummyEventTwo;
+import ca.hilikus.events.event_manager.dummies.DummyListener;
 import ch.qos.logback.classic.Level;
 
 /**
@@ -21,25 +25,6 @@ import ch.qos.logback.classic.Level;
 public class GenericEventDispatcherTest {
 
     private GenericEventDispatcher<EventListener> TU;
-
-    /**
-     * Event handler used in testing
-     * 
-     * @author hilikus
-     */
-    public class DummyListener implements EventListener {
-	/**
-	 * @param event dummy event
-	 */
-	public void update(DummyEvent event) {
-	}
-
-	/**
-	 * @param event other dummy event
-	 */
-	public void update(DummyEventTwo event) {
-	}
-    }
 
     /**
      * Configures tests
@@ -74,6 +59,25 @@ public class GenericEventDispatcherTest {
 	});
 
 	assertEquals(TU.getListenersCount(), 3, "Adding a different listener failed");
+    }
+    
+    /**
+     * Tests if adding duplicate listeners registers only one
+     */
+    @Test(dependsOnMethods={"addListener", "fireEvent"})
+    public void addDuplicateListener() {
+	
+	DummyListener listener = mock(DummyListener.class);
+	TU.addListener(listener);
+	TU.addListener(listener);
+	
+	assertEquals(TU.getListenersCount(), 1, "Ignored duplicate listener");
+	
+	DummyEvent mockEvent = new DummyEvent();
+	TU.fireEvent(mockEvent);
+	
+	verify(listener, times(1)).update(mockEvent);
+	
     }
 
     /**
