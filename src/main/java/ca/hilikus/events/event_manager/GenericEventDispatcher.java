@@ -5,8 +5,10 @@ import java.lang.reflect.Method;
 import java.util.EventListener;
 import java.util.EventObject;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.slf4j.Logger;
@@ -41,10 +43,12 @@ public class GenericEventDispatcher<T extends EventListener> implements EventDis
     @SuppressWarnings("unchecked")
     public void addListener(T listener) {
 	Method[] declaredMethods = listener.getClass().getDeclaredMethods();
+	boolean found = false;
 	for (Method method : declaredMethods) { // loop only on declared methods to avoid
 						// calling
 						// empty Adapter methods on event fire
 	    if (CALLBACK_NAME.equals(method.getName())) {
+		found = true;
 		Class<?>[] parameterTypes = method.getParameterTypes();
 		if (parameterTypes.length >= 1 && EventObject.class.isAssignableFrom(parameterTypes[0])) { // since
 													   // event
@@ -76,6 +80,10 @@ public class GenericEventDispatcher<T extends EventListener> implements EventDis
 		    }
 		}
 	    }
+	}
+	
+	if (!found) {
+	    log.warn("[addListener] No callback method found in provided listener {}", listener);
 	}
 
     }
@@ -183,6 +191,25 @@ public class GenericEventDispatcher<T extends EventListener> implements EventDis
 	    }
 	}
 
+    }
+    
+    /**
+     * @return the number of listeners currently registered for all events
+     */
+    public int getListenersCount() {
+	Set<Object> countingSet =new HashSet<>();
+	for (List<?> listenersList : listeners.values()) {
+	    countingSet.addAll(listenersList);
+	}
+	return countingSet.size();
+    }
+    
+    /**
+     * @param eventType the type of event interested in
+     * @return the number of listeners for an event type
+     */
+    public int getListenersCount(Class<? extends EventObject> eventType) {
+	return listeners.get(eventType).size();
     }
 
 }
