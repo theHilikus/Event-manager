@@ -1,4 +1,4 @@
-package ca.hilikus.events.event_manager;
+package com.github.thehilikus.events.event_manager;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -12,9 +12,11 @@ import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import ca.hilikus.events.event_manager.dummies.DummyEvent;
-import ca.hilikus.events.event_manager.dummies.DummyEventTwo;
-import ca.hilikus.events.event_manager.dummies.DummyListener;
+import com.github.thehilikus.events.event_manager.GenericEventDispatcher;
+
+import com.github.thehilikus.events.event_manager.dummies.DummyEvent;
+import com.github.thehilikus.events.event_manager.dummies.DummyEventTwo;
+import com.github.thehilikus.events.event_manager.dummies.DummyListener;
 import ch.qos.logback.classic.Level;
 
 /**

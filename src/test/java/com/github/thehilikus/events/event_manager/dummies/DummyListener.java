@@ -1,4 +1,4 @@
-package ca.hilikus.events.event_manager.dummies;
+package com.github.thehilikus.events.event_manager.dummies;
 
 import java.util.EventListener;
 

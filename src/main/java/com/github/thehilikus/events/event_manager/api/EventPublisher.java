@@ -1,4 +1,4 @@
-package ca.hilikus.events.event_manager.api;
+package com.github.thehilikus.events.event_manager.api;
 
 /**
  * Contract for classes that generate events

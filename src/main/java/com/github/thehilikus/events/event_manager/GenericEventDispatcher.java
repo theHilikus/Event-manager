@@ -1,4 +1,4 @@
-package ca.hilikus.events.event_manager;
+package com.github.thehilikus.events.event_manager;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -14,7 +14,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ca.hilikus.events.event_manager.api.EventDispatcher;
+import com.github.thehilikus.events.event_manager.api.EventDispatcher;
+
 
 /**
  * Event dispatcher for any kind of event

@@ -1,4 +1,4 @@
-package ca.hilikus.events.event_manager;
+package com.github.thehilikus.events.event_manager;
 
 import static org.mockito.Mockito.mock;
 import static org.testng.Assert.assertEquals;
@@ -10,9 +10,11 @@ import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import ca.hilikus.events.event_manager.api.EventDispatcher;
-import ca.hilikus.events.event_manager.api.EventPublisher;
-import ca.hilikus.events.event_manager.dummies.DummyListener;
+import com.github.thehilikus.events.event_manager.SubscriptionManager;
+import com.github.thehilikus.events.event_manager.api.EventDispatcher;
+import com.github.thehilikus.events.event_manager.api.EventPublisher;
+
+import com.github.thehilikus.events.event_manager.dummies.DummyListener;
 import ch.qos.logback.classic.Level;
 
 /**
