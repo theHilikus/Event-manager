@@ -41,9 +41,8 @@ public class SubscriptionManager {
     }
 
     private <T extends EventListener> GenericEventDispatcher<T> createDispatcher(EventPublisher source) {
-	GenericEventDispatcher<T> dispatcher;
+	GenericEventDispatcher<T> dispatcher = new GenericEventDispatcher<>();
 	log.trace("[createDispatcher] Creating event dispatcher for {}", source);
-	dispatcher = new GenericEventDispatcher<>();
 	dispatchers.put(source, dispatcher);
 	return dispatcher;
     }

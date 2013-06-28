@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 
 import com.github.thehilikus.events.event_manager.api.EventDispatcher;
 
-
 /**
  * Event dispatcher for any kind of event
  * 
@@ -41,7 +40,6 @@ public class GenericEventDispatcher<T extends EventListener> implements EventDis
      * 
      * @param listener the object to notify
      */
-    @SuppressWarnings("unchecked")
     public void addListener(T listener) {
 	Method[] declaredMethods = listener.getClass().getDeclaredMethods();
 	boolean found = false;
@@ -60,36 +58,39 @@ public class GenericEventDispatcher<T extends EventListener> implements EventDis
 													   // the
 													   // event
 													   // argument
-		    // event argument must be the first
-		    List<T> eventListeners = listeners.get(parameterTypes[0]);
-		    if (eventListeners == null) {
-			// first listener for this event type
-			eventListeners = new CopyOnWriteArrayList<>();
-			listeners.put((Class<? extends EventObject>) parameterTypes[0], eventListeners);
-		    }
-		    if (eventListeners.contains(listener)) {
-			log.debug(
-				"[addListener]Trying to register an already registered element: {} for event {}",
-				listener, parameterTypes[0].getName());
-		    } else {
-			eventListeners.add(listener);
-			methodsCache.clear();
+		    register(listener, parameterTypes[0]);
 
-			log.trace("[addListener] Registered {} for event {}", listener,
-				parameterTypes[0].getName());
-
-		    }
 		}
 	    }
 	}
-	
+
 	if (!found) {
 	    log.warn("[addListener] No callback method found in provided listener {}", listener);
 	}
 
     }
 
+    @SuppressWarnings("unchecked")
+    private void register(T listener, Class<?> eventParam) {
+	// event argument must be the first
+	List<T> eventListeners = listeners.get(eventParam);
+	if (eventListeners == null) {
+	    // first listener for this event type
+	    eventListeners = new CopyOnWriteArrayList<>();
+	    listeners.put((Class<? extends EventObject>) eventParam, eventListeners);
+	}
+	if (eventListeners.contains(listener)) {
+	    log.debug("[addListener]Trying to register an already registered element: {} for event {}", listener,
+		    eventParam.getName());
+	} else {
+	    eventListeners.add(listener);
+	    methodsCache.clear();
 
+	    log.trace("[addListener] Registered {} for event {}", listener, eventParam.getName());
+
+	}
+
+    }
 
     /**
      * @param listener the object to remove
@@ -137,8 +138,8 @@ public class GenericEventDispatcher<T extends EventListener> implements EventDis
     @Override
     public void fireEvent(EventObject event) {
 
-	log.trace("[fireEvent] Firing event {} coming from {}", event.getClass().getSimpleName(), event
-		.getSource().getClass().getSimpleName());
+	log.trace("[fireEvent] Firing event {} coming from {}", event.getClass().getSimpleName(), event.getSource()
+		.getClass().getSimpleName());
 
 	List<T> listenersToCall = listeners.get(event.getClass());
 	Class<?> handlerParam = event.getClass();
@@ -155,6 +156,7 @@ public class GenericEventDispatcher<T extends EventListener> implements EventDis
 		}
 		superClass = superClass.getSuperclass();
 	    }
+
 	    if (listenersToCall == null) {
 
 		log.debug("[fireEvent] Lost event. No registered listeners for event " + event);
@@ -164,47 +166,56 @@ public class GenericEventDispatcher<T extends EventListener> implements EventDis
 	}
 
 	for (T listener : listenersToCall) {
-
 	    int hash = (listener.getClass().hashCode() * 7) ^ (event.getClass().hashCode() * 13);
-	    Method callback = methodsCache.get(hash);
-	    if (callback == null) {
-		// cache miss
 
-		try {
-		    callback = listener.getClass().getDeclaredMethod(CALLBACK_NAME, handlerParam);
-		    methodsCache.put(hash, callback);
-
-		} catch (NoSuchMethodException exc) {
-		    log.error("[fireEvent] ", exc);
-		}
-
-	    }
-
-	    assert callback != null;
-	    try {
-		callback.invoke(listener, event);
-	    } catch (IllegalArgumentException exc) {
-		log.error("[fireEvent] " + callback, exc);
-	    } catch (IllegalAccessException exc) {
-		log.error("[fireEvent] Event handler is not accessible: {}", callback, exc);
-	    } catch (InvocationTargetException exc) {
-		log.error("[fireEvent] Error invoking method " + callback, exc.getCause());
-	    }
+	    Method callback = getCallback(handlerParam, listener, hash);
+	    dispatchEvent(listener, event, callback);
 	}
 
     }
-    
+
+    private void dispatchEvent(T listener, EventObject event, Method callback) {
+	assert callback != null;
+	
+	try {
+	    callback.invoke(listener, event);
+	} catch (IllegalArgumentException exc) {
+	    log.error("[dispatchEvent] " + callback, exc);
+	} catch (IllegalAccessException exc) {
+	    log.error("[dispatchEvent] Event handler is not accessible: {}", callback, exc);
+	} catch (InvocationTargetException exc) {
+	    log.error("[dispatchEvent] Error invoking method " + callback, exc.getCause());
+	}
+    }
+
+    private Method getCallback(Class<?> handlerParam, T listener, int hash) {
+	Method callback = methodsCache.get(hash);
+	if (callback == null) {
+	    // cache miss
+
+	    try {
+		callback = listener.getClass().getDeclaredMethod(CALLBACK_NAME, handlerParam);
+		methodsCache.put(hash, callback);
+
+	    } catch (NoSuchMethodException exc) {
+		log.error("[getCallback] ", exc);
+	    }
+
+	}
+	return callback;
+    }
+
     /**
      * @return the number of listeners currently registered for all events
      */
     public int getListenersCount() {
-	Set<Object> countingSet =new HashSet<>();
+	Set<Object> countingSet = new HashSet<>();
 	for (List<?> listenersList : listeners.values()) {
 	    countingSet.addAll(listenersList);
 	}
 	return countingSet.size();
     }
-    
+
     /**
      * @param eventType the type of event interested in
      * @return the number of listeners for an event type
