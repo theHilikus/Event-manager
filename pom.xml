@@ -6,9 +6,9 @@
 		<groupId>org.sonatype.oss</groupId>
 		<artifactId>oss-parent</artifactId>
 		<version>7</version>
-		<relativePath/>
+		<relativePath />
 	</parent>
-	
+
 	<groupId>com.github.thehilikus.events</groupId>
 	<artifactId>event-manager</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
@@ -42,7 +42,20 @@
 					<forkedProcessTimeoutInSeconds>15</forkedProcessTimeoutInSeconds>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>1.5</version>
+			</plugin>
 		</plugins>
+		<resources>
+			<resource>
+				<directory>${basedir}</directory>
+				<includes>
+					<include>LICENSE*</include>
+				</includes>
+			</resource>
+		</resources>
 	</build>
 
 	<description>A library to deal with event subscriptions and dispatches</description>
