@@ -75,6 +75,7 @@
 	<scm>
 		<connection>scm:git:git://github.com/theHilikus/Event-manager.git</connection>
 		<url>https://github.com/theHilikus/Event-Manager</url>
+		<developerConnection>scm:git:https://github.com/theHilikus/Event-manager.git</developerConnection>
 	</scm>
 	<inceptionYear>2013</inceptionYear>
 	<licenses>
@@ -107,4 +108,5 @@
 		<system>Jenkins</system>
 		<url>https://hilikus.ci.cloudbees.com/job/Event-manager/</url>
 	</ciManagement>
+
 </project>
