@@ -10,7 +10,7 @@
 
 	<groupId>com.github.thehilikus.events</groupId>
 	<artifactId>event-manager</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>Event-manager</name>
@@ -83,7 +83,7 @@
 		<connection>scm:git:git://github.com/theHilikus/Event-manager.git</connection>
 		<url>https://github.com/theHilikus/Event-Manager</url>
 		<developerConnection>scm:git:https://github.com/theHilikus/Event-manager.git</developerConnection>
-		<tag>event-manager-1.0.0</tag>
+		<tag>HEAD</tag>
 	</scm>
 	<inceptionYear>2013</inceptionYear>
 	<licenses>
