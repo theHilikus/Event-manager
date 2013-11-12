@@ -28,6 +28,9 @@ public class SubscriptionManager {
      * @param listener the event receiver
      */
     public <T extends EventListener> void subscribe(EventPublisher source, T listener) {
+	if (source == null || listener == null) {
+	    throw new IllegalArgumentException("Parameters cannot be null");
+	}
 	log.debug("[subscribe] Adding {} --> {}", source.getClass().getName(), listener.getClass().getName());
 
 	GenericEventDispatcher<T> dispatcher = (GenericEventDispatcher<T>) dispatchers.get(source);
@@ -85,6 +88,15 @@ public class SubscriptionManager {
 	    dispatcher.removeListeners();
 	}
 
+    }
+    
+    /**
+     * Removes all the listeners for <b>all</b> the event generators
+     */
+    public void unsubscribeAll() {
+	for (EventPublisher publisher : dispatchers.keySet()) {
+	    unsubscribeAll(publisher);
+	}
     }
 
     @Override
