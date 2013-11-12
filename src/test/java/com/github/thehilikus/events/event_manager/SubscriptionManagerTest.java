@@ -42,7 +42,7 @@ public class SubscriptionManagerTest {
      * Checks removing all listeners of a particular publisher
      */
     @Test(dependsOnMethods = "subscribe")
-    public void unsubscribeAll() {
+    public void unsubscribeAllSingle() {
 	EventPublisher publisher = mock(EventPublisher.class);
 	TU.subscribe(publisher, new DummyListener());
 	TU.subscribe(publisher, new DummyListener());
@@ -56,6 +56,25 @@ public class SubscriptionManagerTest {
 
     }
 
+    /**
+     * Checks removing all the listeners of all the publishers
+     */
+    @Test
+    public void unsubscribeAllAll() {
+	EventPublisher publisher = mock(EventPublisher.class);
+	TU.subscribe(publisher, new DummyListener());
+	TU.subscribe(publisher, new DummyListener());
+
+	EventPublisher publisherTwo = mock(EventPublisher.class);
+	TU.subscribe(publisherTwo, new DummyListener());
+
+	TU.unsubscribeAll();
+	assertEquals(TU.getSubscribersCount(publisher), 0, "Publisher one was not cleaned");
+	assertEquals(TU.getSubscribersCount(publisherTwo), 0, "Publisher two was not cleaned");
+
+    }
+
+    
     /**
      * Tests that different objects get different dispatchers
      */
